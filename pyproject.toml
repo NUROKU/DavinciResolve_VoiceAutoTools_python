@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "davinci_VoiceAutoTools"
+version = "0.1.0"
+description = "Scripts for helps work to editing software talk movie used davinci resolve"
+authors = ["NUROKU <shimau6@yahoo.co.jp>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+build_sync = "manage:build_sync"
