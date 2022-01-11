@@ -56,19 +56,14 @@ class SrtList:
                 self._ChangeCompText(dummy_timelineitem, srt, True)
                 is_first = False
 
-    def SaveForSrt(self, output_folder_path, resolve):
+    def SaveForSrt(self, output_folder_path, fill_mode, resolve):
 
         # TODO framerate取得はutilに置いていいかも、TimelineVoiceに同じのあるし
-        framerate = resolve \
-            .GetProjectManager() \
-            .GetCurrentProject() \
-            .GetSetting("timelineFrameRate")
-
         srt_text = ""
         srt_count = 0
         for srtitem in self.srt_list:
             srt_text += str(srt_count) + "\n"
-            srt_text += srtitem.Dump2SrtInfo() + "\n"
+            srt_text += srtitem.Dump2SrtInfo(fill_mode) + "\n"
             srt_text += "\n"
 
             srt_count = srt_count + 1

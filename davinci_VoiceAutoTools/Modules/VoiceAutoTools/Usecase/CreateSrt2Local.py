@@ -19,6 +19,6 @@ class CreateSrt2Local:
             .CatchTimelineVoiceListFromVoiceIndex(config["srt_timeline_audio_index"]) \
             .Convert2SrtList(config["folder_path"])
 
-        srt_list.SaveForSrt(config["srt_output_folder"], resolve)
+        srt_list.SaveForSrt(config["srt_output_folder"], config["srt_fill_mode"], resolve)
 
         print("Done")
