@@ -1,4 +1,6 @@
-
+import datetime
+import time
+from Domain.SrtItem import SrtItem
 
 class SrtList:
 
@@ -25,29 +27,66 @@ class SrtList:
                 self.template_fusiontext = clip
                 break
 
-    def addSrtItem2List(self, srtitem):
-        self.srt_list.append(srtitem)
+    def addSrtItem2List(self, filename, frame, start_offset, framerate, next_start_offset):
+        filepath = self.srt_folderpath + "\\" + filename
+        srt_item = SrtItem(filepath, frame, start_offset, framerate, next_start_offset)
+        self.srt_list.append(srt_item)
 
-    def PutSrt2Timeline(self, timeline, mediapool):
+    def PutSrt2Timeline(self, resolve, fill_mode):
         clip = self.template_fusiontext
+        is_first = True
+        mediapool = resolve.GetProjectManager() \
+            .GetCurrentProject() \
+            .GetMediaPool()
 
-        for srt in self.srt_list:
-            subClip = srt.Dump2Clipinfo(clip)
-            timelineitem = mediapool.AppendToTimeline([subClip])[0]
-            self._ChangeCompText(timelineitem, srt)
+        if fill_mode:
+            for srt in self.srt_list:
+                subClip = srt.Dump2Clipinfo(clip, include_start_empty=is_first, include_after_empty=True)
+                timelineitem = mediapool.AppendToTimeline([subClip])[0]
+                self._ChangeCompText(timelineitem, srt)
+                is_first = False
+        else:
+            for srt in self.srt_list:
+                subClip = srt.Dump2Clipinfo(clip, include_start_empty=is_first, include_after_empty=False)
+                timelineitem = mediapool.AppendToTimeline([subClip])[0]
+                self._ChangeCompText(timelineitem, srt)
+                
+                dummy_subClip = srt.Dump2DummyClipinfo(clip)
+                dummy_timelineitem = mediapool.AppendToTimeline([dummy_subClip])[0]
+                self._ChangeCompText(dummy_timelineitem, srt, True)
+                is_first = False
+
+    def SaveForSrt(self, output_folder_path, fill_mode, resolve):
+
+        # TODO framerate取得はutilに置いていいかも、TimelineVoiceに同じのあるし
+        srt_text = ""
+        srt_count = 0
+        for srtitem in self.srt_list:
+            srt_text += str(srt_count) + "\n"
+            srt_text += srtitem.Dump2SrtInfo(fill_mode) + "\n"
+            srt_text += "\n"
+
+            srt_count = srt_count + 1
+
+        # TODO ファイル名適当だからなんとかして
+        filepath = output_folder_path + "\\" + datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
+        with open(filepath, mode='w', encoding="utf-8") as f:
+            f.write(srt_text)
             
-    def SaveForSrt(self, folder_path):
+        time.sleep(1)
+        resolve.GetMediaStorage().AddItemListToMediaPool(filepath)
+
+    def SaveForFcpxml(self, folder_path, resolve, template_dict):
+        # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定、値オブジェクトにしたい
         pass
-    
-    
-    def Convert2FCPXMLText(self, folder_path):
-        pass
-    
-    
-    def _ChangeCompText(self, timelineitem, srtitem):
+
+    def _ChangeCompText(self, timelineitem, srtitem, is_dummy=False):
         comp = timelineitem.LoadFusionCompByName("Template")
         comp.Lock()
 
-        comp.Template.StyledText = srtitem.GetOriginalText(self.srt_folderpath)
+        if is_dummy:
+            comp.Template.StyledText = ""
+        else:
+            comp.Template.StyledText = srtitem.getText()
 
         comp.Unlock()
