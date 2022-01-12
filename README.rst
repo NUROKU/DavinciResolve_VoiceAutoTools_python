@@ -1,15 +1,9 @@
 # TODO READMEを整理する
 
 Davinci Resolveでソフトウェアトーク動画を作りやすくするためのスクリプト群
+今できる事できない事などは↓を読んでください
 
-今できること：
-・音声ファイルとの同期
-・Text+の自動配備
-
-今できないけどやりたいこと：
-・srtファイルやfcpxmlファイルの作成
-・設定やファイル作成のGUI化
-・Reactorへの申請
+https://github.com/NUROKU/DavinciResolve_VoiceAutoTools_python/wiki
 
 ----------------------------------
 インストール方法：
