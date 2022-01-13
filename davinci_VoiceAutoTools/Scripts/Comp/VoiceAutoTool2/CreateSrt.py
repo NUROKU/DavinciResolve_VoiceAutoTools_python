@@ -5,4 +5,4 @@ sys.path.append(r"C:\ProgramData\Blackmagic Design\DaVinci Resolve\Fusion\Module
 from Usecase.CreateSrt2Local import CreateSrt2Local
 
 createSrt2Local = CreateSrt2Local()
-createSrt2Local.execute(resolve)
+createSrt2Local.Execute(resolve)

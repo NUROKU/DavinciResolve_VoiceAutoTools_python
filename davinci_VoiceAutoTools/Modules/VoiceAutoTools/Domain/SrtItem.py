@@ -1,6 +1,4 @@
 import os
-import datetime
-import math
 
 class SrtItem:
     # タイムライン上に置かれる字幕
@@ -16,7 +14,7 @@ class SrtItem:
         # self.start_timecode = start_timecode
         # srtで出力する場合にはLeftOffsetとTimeに変換するやつ用意する
 
-    def getText(self):
+    def GetText(self):
         return self.text
 
     def _GetOriginalText(self, original_filepath):
@@ -54,15 +52,15 @@ class SrtItem:
         return clip_info
 
     def Dump2SrtInfo(self, fill_mode):
-        
+
         if fill_mode:
             end_offset = self.next_start_offset
         else:
             end_offset = self.end_offset
-            
+
         start_time = self._Frame2TimeString(self.start_offset)
         end_time = self._Frame2TimeString(end_offset)
-            
+  
         text = self.text
 
         return f"{start_time} --> {end_time}\n{text}"
@@ -82,6 +80,5 @@ class SrtItem:
         hour = int((frame / self.framerate) / 60 / 60 % 60)
 
         time_str = '{hour:02}:{min:02}:{second:02}.{conma:03}'.format(hour=hour, min=min, second=second,conma=conma)
-        #time_str = datetime.time(hour, min, second, conma).strftime("%H:%M:%S.%f")[:-3]
 
         return time_str

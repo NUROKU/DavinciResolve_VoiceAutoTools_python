@@ -7,7 +7,7 @@ class PutTexts2Timeline:
     def __init__(self):
         pass
 
-    def execute(self, resolve):
+    def Execute(self, resolve):
 
         print("Start PutTexts2Timeline")
 

@@ -5,8 +5,6 @@ sys.path.append(r"C:\ProgramData\Blackmagic Design\DaVinci Resolve\Fusion\Module
 
 from Usecase.SyncVoices2MediaPool import SyncVoices2MediaPool
 
-
-
 class CheckLog(tkinter.Checkbutton):
     """
     フォルダ監視ON/OFF切替チェックボタン
@@ -26,9 +24,9 @@ class CheckLog(tkinter.Checkbutton):
 
     def switch_logging(self):
         if self.var.get():
-            self.voice_syncer.execute()
+            self.voice_syncer.Execute()
         else:
-            self.voice_syncer.stop()
+            self.voice_syncer.Stop()
 
 root = tkinter.Tk()
 

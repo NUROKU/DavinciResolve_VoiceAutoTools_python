@@ -27,7 +27,7 @@ class SrtList:
                 self.template_fusiontext = clip
                 break
 
-    def addSrtItem2List(self, filename, frame, start_offset, framerate, next_start_offset):
+    def AddSrtItem2List(self, filename, frame, start_offset, framerate, next_start_offset):
         filepath = self.srt_folderpath + "\\" + filename
         srt_item = SrtItem(filepath, frame, start_offset, framerate, next_start_offset)
         self.srt_list.append(srt_item)
@@ -50,7 +50,7 @@ class SrtList:
                 subClip = srt.Dump2Clipinfo(clip, include_start_empty=is_first, include_after_empty=False)
                 timelineitem = mediapool.AppendToTimeline([subClip])[0]
                 self._ChangeCompText(timelineitem, srt)
-                
+
                 dummy_subClip = srt.Dump2DummyClipinfo(clip)
                 dummy_timelineitem = mediapool.AppendToTimeline([dummy_subClip])[0]
                 self._ChangeCompText(dummy_timelineitem, srt, True)
@@ -72,7 +72,7 @@ class SrtList:
         filepath = output_folder_path + "\\" + datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
         with open(filepath, mode='w', encoding="utf-8") as f:
             f.write(srt_text)
-            
+
         time.sleep(1)
         resolve.GetMediaStorage().AddItemListToMediaPool(filepath)
 
@@ -87,6 +87,6 @@ class SrtList:
         if is_dummy:
             comp.Template.StyledText = ""
         else:
-            comp.Template.StyledText = srtitem.getText()
+            comp.Template.StyledText = srtitem.GetText()
 
         comp.Unlock()
