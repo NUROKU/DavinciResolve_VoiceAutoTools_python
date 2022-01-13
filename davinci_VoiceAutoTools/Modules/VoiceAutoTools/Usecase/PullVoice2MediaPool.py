@@ -7,7 +7,7 @@ class PullVoice2MediaPool:
     def __init__(self):
         pass
 
-    def execute(self, resolve):
+    def Execute(self, resolve):
 
         print("Start PutTexts2Timeline")
 
@@ -16,5 +16,5 @@ class PullVoice2MediaPool:
 
         voice_mediapoolitem_list = voice_mediabin.PullVoiceToAudioMediaBin(config["folder_path"])
 
-        voice_mediabin.putVoice2Timeline(voice_mediapoolitem_list)
+        voice_mediabin.PutVoice2Timeline(voice_mediapoolitem_list)
         print("Done")
