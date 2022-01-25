@@ -4,7 +4,7 @@ from Domain.TimelineVoiceItem import TimelineVoiceItem
 
 class TimelineVoiceList:
 
-    def __init__(self, resolve):
+    def __init__(self, resolve: object):
         timeline = resolve.GetProjectManager() \
             .GetCurrentProject() \
             .GetCurrentTimeline()
@@ -22,16 +22,16 @@ class TimelineVoiceList:
             .GetSetting("timelineFrameRate")
         return framerate
 
-    def CatchTimelineVoiceListFromVoiceIndex(self, index: int):
+    def CatchTimelineVoiceListFromVoiceIndex(self, index: int = 0):
         voiceclip_list = self.timeline.GetItemListInTrack("audio",  index)
         for voiceclip in voiceclip_list:
             self.timeline_voice_list.append(TimelineVoiceItem(voiceclip))
         return self
 
-    def Convert2SrtList(self, voice_folderpath):
-        #TODO SrtItemに余白分を合わせて作成するようにして、fillmode無しでも数変わらないようにする
+    def Convert2SrtList(self, voice_folderpath: str):
+        # TODO SrtItemに余白分を合わせて作成するようにして、fillmode無しでも数変わらないようにする
         srt_list = SrtList(voice_folderpath)
-        
+
         for index, voiceitem in enumerate(self.timeline_voice_list):
             if index + 1 != len(self.timeline_voice_list):
                 nextvoice_start_offset = self.timeline_voice_list[index + 1].start_offset
