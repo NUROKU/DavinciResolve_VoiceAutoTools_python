@@ -7,7 +7,7 @@ from Domain.VoiceMediaBin import VoiceMediaBin
 class VoiceSyncWoeker:
 
     class VoiceSyncEventHandler(LoggingEventHandler):
-        def __init__(self, voice_media_bin):
+        def __init__(self, voice_media_bin: object):
 
             super().__init__()
             self.voice_media_bin = voice_media_bin
@@ -19,7 +19,7 @@ class VoiceSyncWoeker:
             item = self.voice_media_bin.PullVoiceToAudioMediaBin(filepath)
             self.voice_media_bin.putVoice2Timeline(item)
 
-    def __init__(self, resolve, voice_outputbin, folder_path) -> None:
+    def __init__(self, resolve, voice_outputbin: str, folder_path: str) -> None:
         self.resolve = resolve
         self.folder_path = folder_path
         self.voice_media_bin = VoiceMediaBin(resolve, voice_outputbin)

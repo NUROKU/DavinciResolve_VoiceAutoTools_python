@@ -3,7 +3,12 @@ import os
 class SrtItem:
     # タイムライン上に置かれる字幕
 
-    def __init__(self, original_filepath, frame, start_offset, framerate, next_start_offset):
+    def __init__(self,
+                 original_filepath: str,
+                 frame: int,
+                 start_offset: int,
+                 framerate: float,
+                 next_start_offset: int):
         self.original_filepath = original_filepath
         self.frame = frame
         self.start_offset = start_offset
@@ -17,17 +22,9 @@ class SrtItem:
     def GetText(self):
         return self.text
 
-    def _GetOriginalText(self, original_filepath):
-        # これここでいいのかなあ、あくまで値を返すだけだから大丈夫でしょ
-        if self.original_filepath == "":
-            return ""
-        textFile = os.path.splitext(original_filepath)[0] + ".txt"
-        text = ""
-        with open(textFile, "r", encoding="utf-8_sig") as f:
-            text = f.read()
-        return text
-
-    def Dump2Clipinfo(self, clip, include_start_empty=False, include_after_empty=True):
+    def Dump2Clipinfo(self, clip: object,
+                      include_start_empty: bool = False,
+                      include_after_empty: bool = True):
         end_frame = self.frame
 
         if include_start_empty:
@@ -43,7 +40,7 @@ class SrtItem:
         }
         return clip_info
 
-    def Dump2DummyClipinfo(self, clip):
+    def Dump2DummyClipinfo(self, clip: object):
         clip_info = {
             "mediaPoolItem": clip,
             "startFrame": 0,
@@ -51,8 +48,7 @@ class SrtItem:
         }
         return clip_info
 
-    def Dump2SrtInfo(self, fill_mode):
-
+    def Dump2SrtInfo(self, fill_mode: bool = True):
         if fill_mode:
             end_offset = self.next_start_offset
         else:
@@ -60,7 +56,7 @@ class SrtItem:
 
         start_time = self._Frame2TimeString(self.start_offset)
         end_time = self._Frame2TimeString(end_offset)
-  
+
         text = self.text
 
         return f"{start_time} --> {end_time}\n{text}"
@@ -69,6 +65,14 @@ class SrtItem:
 
         pass
 
+    def _GetOriginalText(self, original_filepath: str):
+        if self.original_filepath == "":
+            return ""
+        textFile = os.path.splitext(original_filepath)[0] + ".txt"
+        text = ""
+        with open(textFile, "r", encoding="utf-8_sig") as f:
+            text = f.read()
+        return text
 
     def _Frame2TimeString(self, frame):
         # 00:00:00:000 みたいなStringを返す

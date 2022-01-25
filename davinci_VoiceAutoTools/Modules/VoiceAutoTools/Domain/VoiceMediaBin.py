@@ -1,6 +1,6 @@
 class VoiceMediaBin:
 
-    def __init__(self, resolve, voice_outputbin):
+    def __init__(self, resolve: object, voice_outputbin: str):
         self.resolve = resolve
         self.mediapool = self._GetMediapool(resolve)
         self.bin = self._GetBin(self.mediapool, voice_outputbin)
@@ -17,17 +17,17 @@ class VoiceMediaBin:
 
         return clip_list
 
-    def PutVoice2Timeline(self, voice_mediapoolitem):
+    def PutVoice2Timeline(self, voice_mediapoolitem: object):
         timelineitem_list = self.mediapool.AppendToTimeline(voice_mediapoolitem)
         return timelineitem_list
 
-    def _GetMediapool(self, resolve):
+    def _GetMediapool(self, resolve: object):
         mediapool = resolve.GetProjectManager() \
             .GetCurrentProject() \
             .GetMediaPool()
         return mediapool
 
-    def _GetBin(self, mediapool, voice_outputbin):
+    def _GetBin(self, mediapool: object, voice_outputbin: str):
         root_bin = mediapool.GetRootFolder()
 
         sub_folders = root_bin.GetSubFolderList()

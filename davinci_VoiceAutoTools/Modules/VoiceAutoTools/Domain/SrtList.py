@@ -4,13 +4,16 @@ from Domain.SrtItem import SrtItem
 
 class SrtList:
 
-    def __init__(self, folderpath):
+    def __init__(self, folderpath: str):
         self.srt_folderpath = folderpath
         self.srt_list = []
         self.template_fusiontext = None
         pass
 
-    def SetTemplateFusionText(self, resolve, template_bin_name, template_fusiontext_name):
+    def SetTemplateFusionText(self,
+                              resolve: object,
+                              template_bin_name: str,
+                              template_fusiontext_name: str):
         root_bin = resolve.GetProjectManager() \
             .GetCurrentProject() \
             .GetMediaPool() \
@@ -27,12 +30,17 @@ class SrtList:
                 self.template_fusiontext = clip
                 break
 
-    def AddSrtItem2List(self, filename, frame, start_offset, framerate, next_start_offset):
+    def AddSrtItem2List(self,
+                        filename: str,
+                        frame: int,
+                        start_offset: int,
+                        framerate: float,
+                        next_start_offset: int):
         filepath = self.srt_folderpath + "\\" + filename
         srt_item = SrtItem(filepath, frame, start_offset, framerate, next_start_offset)
         self.srt_list.append(srt_item)
 
-    def PutSrt2Timeline(self, resolve, fill_mode):
+    def PutSrt2Timeline(self, resolve: object, fill_mode: bool = True):
         clip = self.template_fusiontext
         is_first = True
         mediapool = resolve.GetProjectManager() \
@@ -56,7 +64,10 @@ class SrtList:
                 self._ChangeCompText(dummy_timelineitem, srt, True)
                 is_first = False
 
-    def SaveForSrt(self, output_folder_path, fill_mode, resolve):
+    def SaveForSrt(self,
+                   output_folder_path: str,
+                   fill_mode: bool,
+                   resolve: object):
 
         # TODO framerate取得はutilに置いていいかも、TimelineVoiceに同じのあるし
         srt_text = ""
@@ -69,18 +80,22 @@ class SrtList:
             srt_count = srt_count + 1
 
         # TODO ファイル名適当だからなんとかして
-        filepath = output_folder_path + "\\" + datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
+        filepath = output_folder_path + "\\" + \
+            datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
         with open(filepath, mode='w', encoding="utf-8") as f:
             f.write(srt_text)
 
         time.sleep(1)
         resolve.GetMediaStorage().AddItemListToMediaPool(filepath)
 
-    def SaveForFcpxml(self, folder_path, resolve, template_dict):
-        # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定、値オブジェクトにしたい
+    def SaveForFcpxml(self, resolve: object, folder_path: str, template_dict: dict):
+        # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定
         pass
 
-    def _ChangeCompText(self, timelineitem, srtitem, is_dummy=False):
+    def _ChangeCompText(self,
+                        timelineitem: object,
+                        srtitem: SrtItem,
+                        is_dummy=False):
         comp = timelineitem.LoadFusionCompByName("Template")
         comp.Lock()
 

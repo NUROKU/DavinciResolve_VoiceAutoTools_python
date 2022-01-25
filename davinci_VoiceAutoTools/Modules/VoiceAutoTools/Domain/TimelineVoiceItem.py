@@ -1,7 +1,7 @@
 class TimelineVoiceItem:
     # タイムライン上に置かれたAudio
     # これって値オブジェクトってことになるんですかね
-    def __init__(self, voiceclip):
+    def __init__(self, voiceclip: object):
         self.clip = voiceclip
         self.frame = voiceclip.GetDuration()
         self.voicepath = voiceclip.GetName()
