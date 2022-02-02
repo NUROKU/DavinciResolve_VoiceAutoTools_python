@@ -39,5 +39,5 @@ class VoiceAutoToolConfig:
         for k, v in config_dic.items():
             config.set(self.SECTION_NAME, k, str(v))
 
-        with open(self.CONFIG_PATH + "\\" + self.FILE_NAME, 'w') as file:
+        with open(self.CONFIG_PATH + "\\" + self.FILE_NAME, 'w', encoding='utf-8') as file:
             config.write(file)
