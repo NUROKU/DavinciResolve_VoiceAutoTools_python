@@ -86,7 +86,13 @@ class SrtList:
             f.write(srt_text)
 
         time.sleep(1)
-        resolve.GetMediaStorage().AddItemListToMediaPool(filepath)
+
+        mediapool = resolve.GetProjectManager() \
+            .GetCurrentProject() \
+            .GetMediaPool()
+        root_bin = mediapool.GetRootFolder()
+        mediapool.SetCurrentFolder(root_bin)
+        mediapool.ImportMedia(filepath)
 
     def SaveForFcpxml(self, resolve: object, folder_path: str, template_dict: dict):
         # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定

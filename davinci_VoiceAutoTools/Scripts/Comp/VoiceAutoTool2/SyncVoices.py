@@ -1,6 +1,6 @@
 import sys
-import tkinter as tk
 import tkinter
+import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
 from tkinter import messagebox
@@ -45,7 +45,7 @@ class FolderPathSelectButton(tk.Button):
             command=self.dirdialog_clicked,
             )
         self.pack(anchor=tk.W)
-        
+
         self.config = VoiceAutoToolConfig.get()
         self.IDirEntry = ttk.Entry(width=100)
         self.IDirEntry.insert(tkinter.END,self.config["folder_path"])
