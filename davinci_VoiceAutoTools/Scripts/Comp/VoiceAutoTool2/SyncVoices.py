@@ -64,6 +64,8 @@ class FolderPathSelectButton(tk.Button):
         fld = fld.replace("/", "\\")
         self.IDirEntry.delete(0, tkinter.END)
         self.IDirEntry.insert(tkinter.END, fld)
+        self.config = VoiceAutoToolConfig.get()
+        
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
 

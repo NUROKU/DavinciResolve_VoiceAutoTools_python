@@ -40,12 +40,15 @@ class FolderPathSelectButton(tk.Button):
 
     def dirdialog_clicked(self):
         fld = filedialog.askdirectory(initialdir=dir)
+        # 区切り文字がunix系のになってるのでここで置換
+        fld = fld.replace("/", "\\")
         self.IDirEntry.delete(0, tkinter.END)
         self.IDirEntry.insert(tkinter.END, fld)
-
+        
         self.config = VoiceAutoToolConfig.get()
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
+
 
 
 class CreateSrtButton(tk.Button):
