@@ -9,7 +9,7 @@ class PullVoice2MediaPool:
 
     def Execute(self, resolve):
 
-        print("Start PutTexts2Timeline")
+        print("Start PullVoice2MediaPool")
 
         config = VoiceAutoToolConfig.get()
         voice_mediabin = VoiceMediaBin(resolve, config["voice_outputbin"])
