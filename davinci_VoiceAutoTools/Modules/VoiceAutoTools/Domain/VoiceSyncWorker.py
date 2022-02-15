@@ -4,8 +4,8 @@ from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
 from Domain.VoiceMediaBin import VoiceMediaBin
 
-class VoiceSyncWoeker:
 
+class VoiceSyncWoeker:
     class VoiceSyncEventHandler(LoggingEventHandler):
         def __init__(self, voice_media_bin: object):
 
@@ -17,7 +17,7 @@ class VoiceSyncWoeker:
             time.sleep(0.5)
             filepath = event.src_path
             item = self.voice_media_bin.PullVoiceToAudioMediaBin(filepath)
-            self.voice_media_bin.putVoice2Timeline(item)
+            self.voice_media_bin.PutVoice2Timeline(item)
 
     def __init__(self, resolve, voice_outputbin: str, folder_path: str) -> None:
         self.resolve = resolve
@@ -28,14 +28,9 @@ class VoiceSyncWoeker:
     def SyncerExecute(self):
         self.observer = Observer()
 
-        self.observer.schedule(
-            self.event_handler,
-            self.folder_path,
-            recursive=False
-            )
+        self.observer.schedule(self.event_handler, self.folder_path, recursive=False)
         self.observer.start()
 
     def SyncerStop(self):
         self.observer.stop()
         self.observer.join()
-
