@@ -1,14 +1,18 @@
 import os
 
+
 class SrtItem:
     # タイムライン上に置かれる字幕
+    ORIGINAL_FILE_ENCODING = "utf-8_sig"
 
-    def __init__(self,
-                 original_filepath: str,
-                 frame: int,
-                 start_offset: int,
-                 framerate: float,
-                 next_start_offset: int):
+    def __init__(
+        self,
+        original_filepath: str,
+        frame: int,
+        start_offset: int,
+        framerate: float,
+        next_start_offset: int,
+    ):
         self.original_filepath = original_filepath
         self.frame = frame
         self.start_offset = start_offset
@@ -22,9 +26,12 @@ class SrtItem:
     def GetText(self):
         return self.text
 
-    def Dump2Clipinfo(self, clip: object,
-                      include_start_empty: bool = False,
-                      include_after_empty: bool = True):
+    def Dump2Clipinfo(
+        self,
+        clip: object,
+        include_start_empty: bool = False,
+        include_after_empty: bool = True,
+    ):
         end_frame = self.frame
 
         if include_start_empty:
@@ -70,7 +77,12 @@ class SrtItem:
             return ""
         textFile = os.path.splitext(original_filepath)[0] + ".txt"
         text = ""
-        with open(textFile, "r", encoding="utf-8_sig") as f:
+
+        if os.path.exists(textFile) is False:
+            print(f"no Found {textFile}")
+            return ""
+
+        with open(textFile, "r", encoding=self.ORIGINAL_FILE_ENCODING) as f:
             text = f.read()
         return text
 
@@ -83,6 +95,8 @@ class SrtItem:
         min = int((frame / self.framerate) / 60 % 60)
         hour = int((frame / self.framerate) / 60 / 60 % 60)
 
-        time_str = '{hour:02}:{min:02}:{second:02}.{conma:03}'.format(hour=hour, min=min, second=second,conma=conma)
+        time_str = "{hour:02}:{min:02}:{second:02}.{conma:03}".format(
+            hour=hour, min=min, second=second, conma=conma
+        )
 
         return time_str

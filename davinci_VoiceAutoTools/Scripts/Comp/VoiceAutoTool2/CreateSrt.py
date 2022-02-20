@@ -3,6 +3,7 @@ import tkinter
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
+from tkinter import messagebox
 
 # 参照パスにModuleフォルダ追加
 sys.path.append(
@@ -44,7 +45,7 @@ class FolderPathSelectButton(tk.Button):
         fld = fld.replace("/", "\\")
         self.IDirEntry.delete(0, tkinter.END)
         self.IDirEntry.insert(tkinter.END, fld)
-        
+
         self.config = VoiceAutoToolConfig.get()
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
@@ -104,8 +105,12 @@ class CreateSrtButton(tk.Button):
         VoiceAutoToolConfig.set(self.config)
 
         createSrt2Local = CreateSrt2Local()
-        createSrt2Local.Execute(self.resolve)
 
+        try:
+            createSrt2Local.Execute(self.resolve)
+            messagebox.showinfo("createSrt2Local", "字幕を出力しました")
+        except Exception as e:
+            messagebox.showerror("エラー", e)
 
 class CreateFcpxmlButton(tk.Button):
     """
@@ -120,14 +125,13 @@ class PutTextsButton(tk.Button):
     .PutTextボタン
     """
 
-    # fusion仮置きするボタンがあればいいなあ
-
     def put_Text(self):
         putTexts2Timeline = PutTexts2Timeline()
-        putTexts2Timeline.Execute(self.resolve)
-
-    pass
-
+        try:
+            putTexts2Timeline.Execute(self.resolve)
+            messagebox.showinfo("putTexts", "タイムラインに字幕を出力しました")
+        except Exception as e:
+            messagebox.showerror("エラー", e)
 
 root = tk.Tk()
 

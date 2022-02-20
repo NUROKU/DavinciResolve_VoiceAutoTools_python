@@ -65,7 +65,7 @@ class FolderPathSelectButton(tk.Button):
         self.IDirEntry.delete(0, tkinter.END)
         self.IDirEntry.insert(tkinter.END, fld)
         self.config = VoiceAutoToolConfig.get()
-        
+
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
 
@@ -86,9 +86,11 @@ class PullButton(tk.Button):
 
     def pullbutton_clicked(self):
         pullVoice2MediaPool = PullVoice2MediaPool()
-        pullVoice2MediaPool.Execute(self.resolve)
-
-        messagebox.showinfo("SyncVoice", "ボイスのPullが完了しました。")
+        try:
+            pullVoice2MediaPool.Execute(self.resolve)
+            messagebox.showinfo("SyncVoice", "ボイスのPullが完了しました。")
+        except Exception as e:
+            messagebox.showerror("エラー", e)
 
 
 root = tk.Tk()

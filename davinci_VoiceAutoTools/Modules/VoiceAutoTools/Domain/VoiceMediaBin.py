@@ -1,3 +1,7 @@
+from VoiceAutoToolException import PullVoiceFailedException
+from VoiceAutoToolException import PutVoiceFailedException
+
+
 class VoiceMediaBin:
 
     def __init__(self, resolve: object, voice_outputbin: str):
@@ -6,20 +10,25 @@ class VoiceMediaBin:
         self.bin = self._GetBin(self.mediapool, voice_outputbin)
 
     def PullVoiceToAudioMediaBin(self, voice_file_path: str):
-        self.resolve \
-            .GetProjectManager() \
-            .GetCurrentProject() \
-            .GetMediaPool() \
-            .SetCurrentFolder(self.bin)
+        try:
+            self.resolve \
+                .GetProjectManager() \
+                .GetCurrentProject() \
+                .GetMediaPool() \
+                .SetCurrentFolder(self.bin)
 
-        storage = self.resolve.GetMediaStorage()
-        clip_list = storage.AddItemListToMediaPool(voice_file_path)
-
-        return clip_list
+            storage = self.resolve.GetMediaStorage()
+            clip_list = storage.AddItemListToMediaPool(voice_file_path)
+            return clip_list
+        except Exception:
+            raise PullVoiceFailedException()
 
     def PutVoice2Timeline(self, voice_mediapoolitem: object):
-        timelineitem_list = self.mediapool.AppendToTimeline(voice_mediapoolitem)
-        return timelineitem_list
+        try:
+            timelineitem_list = self.mediapool.AppendToTimeline(voice_mediapoolitem)
+            return timelineitem_list
+        except Exception:
+            raise PutVoiceFailedException()
 
     def _GetMediapool(self, resolve: object):
         mediapool = resolve.GetProjectManager() \
