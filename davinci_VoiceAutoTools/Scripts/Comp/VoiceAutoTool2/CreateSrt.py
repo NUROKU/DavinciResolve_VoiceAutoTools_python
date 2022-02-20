@@ -45,7 +45,7 @@ class FolderPathSelectButton(tk.Button):
         fld = fld.replace("/", "\\")
         self.IDirEntry.delete(0, tkinter.END)
         self.IDirEntry.insert(tkinter.END, fld)
-        
+
         self.config = VoiceAutoToolConfig.get()
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
@@ -108,6 +108,7 @@ class CreateSrtButton(tk.Button):
 
         try:
             createSrt2Local.Execute(self.resolve)
+            messagebox.showinfo("createSrt2Local", "字幕を出力しました")
         except Exception as e:
             messagebox.showerror("エラー", e)
 
@@ -124,14 +125,13 @@ class PutTextsButton(tk.Button):
     .PutTextボタン
     """
 
-    # fusion仮置きするボタンがあればいいなあ
-
     def put_Text(self):
         putTexts2Timeline = PutTexts2Timeline()
-        putTexts2Timeline.Execute(self.resolve)
-
-    pass
-
+        try:
+            putTexts2Timeline.Execute(self.resolve)
+            messagebox.showinfo("putTexts", "タイムラインに字幕を出力しました")
+        except Exception as e:
+            messagebox.showerror("エラー", e)
 
 root = tk.Tk()
 

@@ -38,4 +38,3 @@ class VoiceSyncWoeker:
     def SyncerStop(self):
         self.observer.stop()
         self.observer.join()
-
