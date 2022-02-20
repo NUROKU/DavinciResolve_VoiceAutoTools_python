@@ -105,7 +105,7 @@ class CreateSrtButton(tk.Button):
         VoiceAutoToolConfig.set(self.config)
 
         createSrt2Local = CreateSrt2Local()
-        
+
         try:
             createSrt2Local.Execute(self.resolve)
         except Exception as e:
