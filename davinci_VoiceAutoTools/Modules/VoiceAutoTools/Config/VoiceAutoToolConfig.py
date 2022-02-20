@@ -2,6 +2,8 @@ import configparser
 import os
 from tkinter.filedialog import Directory
 
+from VoiceAutoToolException import ConfigGetException
+
 
 class VoiceAutoToolConfig:
 
@@ -16,8 +18,12 @@ class VoiceAutoToolConfig:
             raise FileNotFoundError("Configファイルが存在していない可能性があります")
 
         config_ini = configparser.ConfigParser()
-        config_ini.read(self.CONFIG_PATH + "\\" + self.FILE_NAME, encoding='utf-8')
-
+        
+        try:
+            config_ini.read(self.CONFIG_PATH + "\\" + self.FILE_NAME, encoding='utf-8')
+        except Exception as e:
+            raise ConfigGetException()
+        
         dic = {}
         for key in config_ini.options(self.SECTION_NAME):
             # 雑に型変換

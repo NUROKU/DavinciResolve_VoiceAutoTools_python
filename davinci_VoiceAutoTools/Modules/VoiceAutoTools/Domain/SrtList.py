@@ -1,6 +1,7 @@
 import datetime
 import time
 from Domain.SrtItem import SrtItem
+from VoiceAutoToolException import OutputSrtFailedException, PullSrt2MediapoolException
 
 class SrtList:
 
@@ -82,17 +83,23 @@ class SrtList:
         # TODO ファイル名適当だからなんとかして
         filepath = output_folder_path + "\\" + \
             datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
-        with open(filepath, mode='w', encoding="utf-8") as f:
-            f.write(srt_text)
+            
+        try:
+            with open(filepath, mode='w', encoding="utf-8") as f:
+                f.write(srt_text)
 
-        time.sleep(1)
+            time.sleep(1)
 
-        mediapool = resolve.GetProjectManager() \
-            .GetCurrentProject() \
-            .GetMediaPool()
-        root_bin = mediapool.GetRootFolder()
-        mediapool.SetCurrentFolder(root_bin)
-        mediapool.ImportMedia(filepath)
+            mediapool = resolve.GetProjectManager() \
+                .GetCurrentProject() \
+                .GetMediaPool()
+            root_bin = mediapool.GetRootFolder()
+            mediapool.SetCurrentFolder(root_bin)
+            mediapool.ImportMedia(filepath)
+        except OSError as e:
+            OutputSrtFailedException()
+        except Exception as e:
+            PullSrt2MediapoolException()
 
     def SaveForFcpxml(self, resolve: object, folder_path: str, template_dict: dict):
         # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定

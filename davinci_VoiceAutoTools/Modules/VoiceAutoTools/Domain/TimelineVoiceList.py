@@ -1,6 +1,7 @@
 from Domain.SrtItem import SrtItem
 from Domain.SrtList import SrtList
 from Domain.TimelineVoiceItem import TimelineVoiceItem
+from VoiceAutoToolException import CatchVoiceFromTimelineFailedException
 
 class TimelineVoiceList:
 
@@ -23,10 +24,13 @@ class TimelineVoiceList:
         return framerate
 
     def CatchTimelineVoiceListFromVoiceIndex(self, index: int = 0):
-        voiceclip_list = self.timeline.GetItemListInTrack("audio",  index)
-        for voiceclip in voiceclip_list:
-            self.timeline_voice_list.append(TimelineVoiceItem(voiceclip))
-        return self
+        try:
+            voiceclip_list = self.timeline.GetItemListInTrack("audio",  index)
+            for voiceclip in voiceclip_list:
+                self.timeline_voice_list.append(TimelineVoiceItem(voiceclip))
+            return self
+        except Exception:
+            raise CatchVoiceFromTimelineFailedException()
 
     def Convert2SrtList(self, voice_folderpath: str):
         # TODO SrtItemに余白分を合わせて作成するようにして、fillmode無しでも数変わらないようにする

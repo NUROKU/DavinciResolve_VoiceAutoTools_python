@@ -1,6 +1,7 @@
 from Domain.TimelineVoiceList import TimelineVoiceList
 from Config.VoiceAutoToolConfig import VoiceAutoToolConfig
 
+from VoiceAutoToolException import ConfigGetException
 
 class CreateSrt2Local:
 
@@ -10,6 +11,7 @@ class CreateSrt2Local:
     def Execute(self, resolve):
 
         print("Start CreateSrt2Local")
+
 
         config = VoiceAutoToolConfig.get()
 

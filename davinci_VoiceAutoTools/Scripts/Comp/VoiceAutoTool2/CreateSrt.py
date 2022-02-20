@@ -3,6 +3,7 @@ import tkinter
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
+from tkinter import messagebox
 
 # 参照パスにModuleフォルダ追加
 sys.path.append(
@@ -104,8 +105,11 @@ class CreateSrtButton(tk.Button):
         VoiceAutoToolConfig.set(self.config)
 
         createSrt2Local = CreateSrt2Local()
-        createSrt2Local.Execute(self.resolve)
-
+        
+        try:
+            createSrt2Local.Execute(self.resolve)
+        except Exception as e:
+            messagebox.showerror("エラー", e)
 
 class CreateFcpxmlButton(tk.Button):
     """

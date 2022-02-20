@@ -14,7 +14,6 @@ from Usecase.SyncVoices2MediaPool import SyncVoices2MediaPool
 from Usecase.PullVoice2MediaPool import PullVoice2MediaPool
 from Config.VoiceAutoToolConfig import VoiceAutoToolConfig
 
-
 class CheckLog(tk.Checkbutton):
     """
     フォルダ監視ON/OFF切替チェックボタン
