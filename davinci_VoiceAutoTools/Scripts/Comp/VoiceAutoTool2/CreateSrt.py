@@ -112,40 +112,13 @@ class CreateSrtButton(tk.Button):
         except Exception as e:
             messagebox.showerror("エラー", e)
 
-class CreateFcpxmlButton(tk.Button):
-    """
-    .fcpxml作成ボタン
-    """
-
-    pass
-
-
-class PutTextsButton(tk.Button):
-    """
-    .PutTextボタン
-    """
-
-    def put_Text(self):
-        putTexts2Timeline = PutTexts2Timeline()
-        try:
-            putTexts2Timeline.Execute(self.resolve)
-            messagebox.showinfo("putTexts", "タイムラインに字幕を出力しました")
-        except Exception as e:
-            messagebox.showerror("エラー", e)
 
 root = tk.Tk()
 
-# 初期設定
-# 上から[フォルダパス、CreateSrtとその設定、CreateFcpXmlとその設定、PutText+とその設定]
 root.title("VoiceAutoTool_CreateSrt")
 root.geometry("400x200")
 
-label1 = tk.Label(text="srt作成元のフォルダパス設定")
-# label1.pack(anchor=tk.W)
-
 b1 = FolderPathSelectButton(root, resolve)
 b2 = CreateSrtButton(root, resolve)
-# b3 = CreateFcpxmlButton(root, resolve)
-# b4 = PutTextsButton(root, resolve):
 
 root.mainloop()

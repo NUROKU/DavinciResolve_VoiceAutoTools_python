@@ -61,7 +61,7 @@ class PutTextsButton(tk.Button):
         super().__init__(
             root,
             text="PutTexts",
-            command=self.create_srt,
+            command=self.put_texts,
         )
 
         label1 = tk.Label(text="音声インデックス指定")
@@ -97,7 +97,7 @@ class PutTextsButton(tk.Button):
         label4.grid(row=6, column=0, sticky=tk.E)
         self.grid(row=6, column=1, sticky=tk.W)
 
-    def create_srt(self):
+    def put_texts(self):
 
         # 設定値の取得
         self.config = VoiceAutoToolConfig.get()

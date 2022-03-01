@@ -1,6 +1,7 @@
 import datetime
 import os
 import time
+import traceback
 from Domain.SrtItem import SrtItem
 from VoiceAutoToolException import OutputSrtFailedException, PullSrt2MediapoolException
 from VoiceAutoToolException import NoFusionTemplateException
@@ -71,7 +72,8 @@ class SrtList:
                     dummy_timelineitem = mediapool.AppendToTimeline([dummy_subClip])[0]
                     self._ChangeCompText(dummy_timelineitem, srt, True)
                     is_first = False
-        except Exception:
+        except Exception as e:
+            print(traceback.format_exc())
             raise PutSrt2TimelineException()
 
     def SaveForSrt(self,
