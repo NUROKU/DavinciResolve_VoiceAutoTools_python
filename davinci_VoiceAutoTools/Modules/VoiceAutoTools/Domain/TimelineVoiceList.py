@@ -3,12 +3,10 @@ from Domain.SrtList import SrtList
 from Domain.TimelineVoiceItem import TimelineVoiceItem
 from VoiceAutoToolException import CatchVoiceFromTimelineFailedException
 
-class TimelineVoiceList:
 
+class TimelineVoiceList:
     def __init__(self, resolve: object):
-        timeline = resolve.GetProjectManager() \
-            .GetCurrentProject() \
-            .GetCurrentTimeline()
+        timeline = resolve.GetProjectManager().GetCurrentProject().GetCurrentTimeline()
         self.resolve = resolve
         # TODO タイムラインが存在しなかったら勝手に持ってくるか作るかする機能、だれかつくって
         self.timeline = timeline
@@ -17,15 +15,16 @@ class TimelineVoiceList:
         pass
 
     def _GetTimelineFramerate(self):
-        framerate = self.resolve \
-            .GetProjectManager() \
-            .GetCurrentProject() \
+        framerate = (
+            self.resolve.GetProjectManager()
+            .GetCurrentProject()
             .GetSetting("timelineFrameRate")
+        )
         return framerate
 
     def CatchTimelineVoiceListFromVoiceIndex(self, index: int = 0):
         try:
-            voiceclip_list = self.timeline.GetItemListInTrack("audio",  index)
+            voiceclip_list = self.timeline.GetItemListInTrack("audio", index)
             for voiceclip in voiceclip_list:
                 self.timeline_voice_list.append(TimelineVoiceItem(voiceclip))
             return self
@@ -38,20 +37,22 @@ class TimelineVoiceList:
 
         for index, voiceitem in enumerate(self.timeline_voice_list):
             if index + 1 != len(self.timeline_voice_list):
-                nextvoice_start_offset = self.timeline_voice_list[index + 1].start_offset
+                nextvoice_start_offset = self.timeline_voice_list[
+                    index + 1
+                ].start_offset
                 srt_list.AddSrtItem2List(
                     filename=voiceitem.voicepath,
                     frame=voiceitem.frame - 1,
                     start_offset=voiceitem.start_offset,
                     framerate=self.framerate,
-                    next_start_offset=nextvoice_start_offset
-                    )
+                    next_start_offset=nextvoice_start_offset,
+                )
             else:
                 srt_list.AddSrtItem2List(
                     filename=voiceitem.voicepath,
                     frame=voiceitem.frame - 1,
                     start_offset=voiceitem.start_offset,
                     framerate=self.framerate,
-                    next_start_offset=voiceitem.start_offset + voiceitem.frame
-                    )
+                    next_start_offset=voiceitem.start_offset + voiceitem.frame,
+                )
         return srt_list

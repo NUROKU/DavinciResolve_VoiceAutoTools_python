@@ -7,43 +7,46 @@ from VoiceAutoToolException import OutputSrtFailedException, PullSrt2MediapoolEx
 from VoiceAutoToolException import NoFusionTemplateException
 from VoiceAutoToolException import PutSrt2TimelineException
 
-class SrtList:
 
+class SrtList:
     def __init__(self, folderpath: str):
         self.srt_folderpath = folderpath
         self.srt_list = []
         self.template_fusiontext = None
         pass
 
-    def SetTemplateFusionText(self,
-                              resolve: object,
-                              template_bin_name: str,
-                              template_fusiontext_name: str):
-        root_bin = resolve.GetProjectManager() \
-            .GetCurrentProject() \
-            .GetMediaPool() \
+    def SetTemplateFusionText(
+        self, resolve: object, template_bin_name: str, template_fusiontext_name: str
+    ):
+        root_bin = (
+            resolve.GetProjectManager()
+            .GetCurrentProject()
+            .GetMediaPool()
             .GetRootFolder()
+        )
 
         template_bin = None
         for b in root_bin.GetSubFolderList():
-            if(b.GetName() == template_bin_name):
+            if b.GetName() == template_bin_name:
                 template_bin = b
                 break
 
         for clip in template_bin.GetClipList():
-            if(clip.GetClipProperty('File Name') == template_fusiontext_name):
+            if clip.GetClipProperty("File Name") == template_fusiontext_name:
                 self.template_fusiontext = clip
                 break
 
         if self.template_fusiontext is None:
             raise NoFusionTemplateException()
 
-    def AddSrtItem2List(self,
-                        filename: str,
-                        frame: int,
-                        start_offset: int,
-                        framerate: float,
-                        next_start_offset: int):
+    def AddSrtItem2List(
+        self,
+        filename: str,
+        frame: int,
+        start_offset: int,
+        framerate: float,
+        next_start_offset: int,
+    ):
         filepath = self.srt_folderpath + "\\" + filename
         srt_item = SrtItem(filepath, frame, start_offset, framerate, next_start_offset)
         self.srt_list.append(srt_item)
@@ -52,19 +55,21 @@ class SrtList:
         clip = self.template_fusiontext
         is_first = True
         try:
-            mediapool = resolve.GetProjectManager() \
-                .GetCurrentProject() \
-                .GetMediaPool()
+            mediapool = resolve.GetProjectManager().GetCurrentProject().GetMediaPool()
 
             if fill_mode:
                 for srt in self.srt_list:
-                    subClip = srt.Dump2Clipinfo(clip, include_start_empty=is_first, include_after_empty=True)
+                    subClip = srt.Dump2Clipinfo(
+                        clip, include_start_empty=is_first, include_after_empty=True
+                    )
                     timelineitem = mediapool.AppendToTimeline([subClip])[0]
                     self._ChangeCompText(timelineitem, srt)
                     is_first = False
             else:
                 for srt in self.srt_list:
-                    subClip = srt.Dump2Clipinfo(clip, include_start_empty=is_first, include_after_empty=False)
+                    subClip = srt.Dump2Clipinfo(
+                        clip, include_start_empty=is_first, include_after_empty=False
+                    )
                     timelineitem = mediapool.AppendToTimeline([subClip])[0]
                     self._ChangeCompText(timelineitem, srt)
 
@@ -76,10 +81,7 @@ class SrtList:
             print(traceback.format_exc())
             raise PutSrt2TimelineException()
 
-    def SaveForSrt(self,
-                   output_folder_path: str,
-                   fill_mode: bool,
-                   resolve: object):
+    def SaveForSrt(self, output_folder_path: str, fill_mode: bool, resolve: object):
 
         # TODO framerate取得はutilに置いていいかも、TimelineVoiceに同じのあるし
         srt_text = ""
@@ -92,18 +94,20 @@ class SrtList:
             srt_count = srt_count + 1
 
         # TODO ファイル名適当だからなんとかして
-        filepath = output_folder_path + "\\" + \
-            datetime.datetime.now().strftime('%Y%m%d_%H_%M_%S') + ".srt"
+        filepath = (
+            output_folder_path
+            + "\\"
+            + datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S")
+            + ".srt"
+        )
 
         try:
-            with open(filepath, mode='w', encoding="utf-8") as f:
+            with open(filepath, mode="w", encoding="utf-8") as f:
                 f.write(srt_text)
 
             time.sleep(1)
 
-            mediapool = resolve.GetProjectManager() \
-                .GetCurrentProject() \
-                .GetMediaPool()
+            mediapool = resolve.GetProjectManager().GetCurrentProject().GetMediaPool()
             root_bin = mediapool.GetRootFolder()
             mediapool.SetCurrentFolder(root_bin)
             mediapool.ImportMedia(filepath)
@@ -116,10 +120,7 @@ class SrtList:
         # TODO 実装、template_dictは辞書形式でテキストの属性(フォントとかサイズとか)を想定
         pass
 
-    def _ChangeCompText(self,
-                        timelineitem: object,
-                        srtitem: SrtItem,
-                        is_dummy=False):
+    def _ChangeCompText(self, timelineitem: object, srtitem: SrtItem, is_dummy=False):
         comp = timelineitem.LoadFusionCompByName("Template")
         comp.Lock()
 
