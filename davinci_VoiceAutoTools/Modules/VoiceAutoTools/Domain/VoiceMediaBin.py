@@ -3,7 +3,6 @@ from VoiceAutoToolException import PutVoiceFailedException
 
 
 class VoiceMediaBin:
-
     def __init__(self, resolve: object, voice_outputbin: str):
         self.resolve = resolve
         self.mediapool = self._GetMediapool(resolve)
@@ -11,11 +10,9 @@ class VoiceMediaBin:
 
     def PullVoiceToAudioMediaBin(self, voice_file_path: str):
         try:
-            self.resolve \
-                .GetProjectManager() \
-                .GetCurrentProject() \
-                .GetMediaPool() \
-                .SetCurrentFolder(self.bin)
+            self.resolve.GetProjectManager().GetCurrentProject().GetMediaPool().SetCurrentFolder(
+                self.bin
+            )
 
             storage = self.resolve.GetMediaStorage()
             clip_list = storage.AddItemListToMediaPool(voice_file_path)
@@ -31,9 +28,7 @@ class VoiceMediaBin:
             raise PutVoiceFailedException()
 
     def _GetMediapool(self, resolve: object):
-        mediapool = resolve.GetProjectManager() \
-            .GetCurrentProject() \
-            .GetMediaPool()
+        mediapool = resolve.GetProjectManager().GetCurrentProject().GetMediaPool()
         return mediapool
 
     def _GetBin(self, mediapool: object, voice_outputbin: str):
@@ -41,7 +36,7 @@ class VoiceMediaBin:
 
         sub_folders = root_bin.GetSubFolderList()
         for folder in sub_folders:
-            if(folder.GetName() == voice_outputbin):
+            if folder.GetName() == voice_outputbin:
                 return folder
 
         return mediapool.AddSubFolder(root_bin, voice_outputbin)
