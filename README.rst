@@ -7,8 +7,8 @@ https://github.com/NUROKU/DavinciResolve_VoiceAutoTools_python/wiki
 
 ----------------------------------
 インストール方法：
-pythonとpoetryをインストールしてあるPCに本リポジトリをダウンロードした上で下のコマンド実行
-poetry run build_sync
+同梱されているModuleフォルダ、Scriptsフォルダをそれぞれ下に置くと、DavinciResolveに自動的に反映されます
+C:\ProgramData\Blackmagic Design\DaVinci Resolve\Fusion
 
 ---------------------------
 使用ライブラリ：
