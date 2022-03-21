@@ -15,31 +15,6 @@ from Usecase.PullVoice2MediaPool import PullVoice2MediaPool
 from Config.VoiceAutoToolConfig import VoiceAutoToolConfig
 
 
-class CheckLog(tk.Checkbutton):
-    """
-    フォルダ監視ON/OFF切替チェックボタン
-    """
-
-    def __init__(self, root, resolve):
-        self.var = tk.BooleanVar(root, value=False)
-
-        super().__init__(
-            root,
-            text="←ここがONの場合、自動でSyncされます",
-            variable=self.var,
-            command=self.switch_logging,
-        )
-        self.pack(anchor=tk.W)
-
-        self.voice_syncer = SyncVoices2MediaPool(resolve)
-
-    def switch_logging(self):
-        if self.var.get():
-            self.voice_syncer.Execute()
-        else:
-            self.voice_syncer.Stop()
-
-
 class FolderPathSelectButton(tk.Button):
     """
     Sync元フォルダ選択ボタン
@@ -57,6 +32,9 @@ class FolderPathSelectButton(tk.Button):
         self.IDirEntry = ttk.Entry(width=100)
         self.IDirEntry.insert(tkinter.END, self.config["folder_path"])
         self.IDirEntry.pack(anchor=tk.W)
+        
+        self.voice_syncer = SyncVoices2MediaPool(resolve)
+        self.voice_syncer.Execute()
 
     def dirdialog_clicked(self):
         fld = filedialog.askdirectory(initialdir=dir)
@@ -68,7 +46,9 @@ class FolderPathSelectButton(tk.Button):
 
         self.config["folder_path"] = fld
         VoiceAutoToolConfig.set(self.config)
-
+        
+        self.voice_syncer.Stop()
+        self.voice_syncer.Execute()
 
 class PullButton(tk.Button):
     """
@@ -104,6 +84,5 @@ label1 = tk.Label(text="Sync元のフォルダパス設定")
 label1.pack(anchor=tk.W)
 
 b1 = FolderPathSelectButton(root, resolve)
-c = CheckLog(root, resolve)
 b2 = PullButton(root, resolve)
 root.mainloop()

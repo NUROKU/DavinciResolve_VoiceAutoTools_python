@@ -1,23 +1,34 @@
 import time
-
 from watchdog.observers import Observer
-from watchdog.events import LoggingEventHandler
+from watchdog.events import PatternMatchingEventHandler
 from Domain.VoiceMediaBin import VoiceMediaBin
 
 
 class VoiceSyncWoeker:
-    class VoiceSyncEventHandler(LoggingEventHandler):
+    class VoiceSyncEventHandler(PatternMatchingEventHandler):
         def __init__(self, voice_media_bin: object):
-
-            super().__init__()
+            ignore_patterns = ["*.txt"]
+            patterns = ["*.wav"]
+            ignore_directories = True
+            case_sensitive = True
+            super().__init__(
+                patterns=patterns,
+                ignore_patterns=ignore_patterns,
+                ignore_directories=ignore_directories,
+                case_sensitive=case_sensitive,
+            )
             self.voice_media_bin = voice_media_bin
 
         def on_created(self, event):
             # ファイル置かれた直後だと偶にバグるのでWait挟む
             time.sleep(0.5)
             filepath = event.src_path
-            item = self.voice_media_bin.PullVoiceToAudioMediaBin(filepath)
-            self.voice_media_bin.PutVoice2Timeline(item)
+            try:
+                item = self.voice_media_bin.PullVoiceToAudioMediaBin(filepath)
+                self.voice_media_bin.PutVoice2Timeline(item)
+            except Exception as e:
+                #どうしようかなここ
+                print("エラー")
 
     def __init__(self, resolve, voice_outputbin: str, folder_path: str) -> None:
         self.resolve = resolve
