@@ -1,5 +1,7 @@
 from VoiceAutoToolException import PullVoiceFailedException
 from VoiceAutoToolException import PutVoiceFailedException
+from pathlib import Path
+import os
 
 
 class VoiceMediaBin:
@@ -14,9 +16,22 @@ class VoiceMediaBin:
                 self.bin
             )
 
-            storage = self.resolve.GetMediaStorage()
-            clip_list = storage.AddItemListToMediaPool(voice_file_path)
-            return clip_list
+            if os.path.isdir(voice_file_path):
+                files = self._SortFiles(voice_file_path)
+                storage = self.resolve.GetMediaStorage()
+                clip_list = []
+                for file in files:
+                    file_path = voice_file_path + "\\" + file
+                    clip = storage.AddItemListToMediaPool(file_path)
+                    if clip != []:
+                        clip_list.append(clip[0])
+
+                return clip_list
+            else:
+                storage = self.resolve.GetMediaStorage()
+                clip_list = storage.AddItemListToMediaPool(voice_file_path)
+                return clip_list
+
         except Exception:
             raise PullVoiceFailedException()
 
@@ -40,3 +55,9 @@ class VoiceMediaBin:
                 return folder
 
         return mediapool.AddSubFolder(root_bin, voice_outputbin)
+
+    def _SortFiles(self, folder_path: str):
+        files = list(Path(folder_path).glob(r"*"))
+        files.sort(key=os.path.getmtime)
+        files = map(lambda x: x.name, files)
+        return files
